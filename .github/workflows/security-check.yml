@@ -1,0 +1,46 @@
+# This workflow helps maintain repository security by monitoring for unwanted changes
+name: Repository Security Check
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  security-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Verify repository contains only documentation
+      run: |
+        echo "Checking repository contents..."
+        
+        # List all files (excluding .git directory)
+        FILES=$(find . -type f -not -path "./.git/*" -not -path "./.github/*")
+        
+        # Check if any executable files exist
+        EXECUTABLES=$(find . -type f -executable -not -path "./.git/*" -not -path "./.github/*" | wc -l)
+        
+        if [ "$EXECUTABLES" -gt 0 ]; then
+          echo "Error: Executable files found. This repository should only contain documentation."
+          find . -type f -executable -not -path "./.git/*" -not -path "./.github/*"
+          exit 1
+        fi
+        
+        # Verify only allowed file types exist (markdown, txt, and GitHub configs)
+        DISALLOWED=$(find . -type f -not -path "./.git/*" -not -path "./.github/*" \
+          -not -name "*.md" -not -name "*.txt" -not -name "*.yml" -not -name "*.yaml" \
+          -not -name "LICENSE" -not -name ".gitignore" | wc -l)
+        
+        if [ "$DISALLOWED" -gt 0 ]; then
+          echo "Warning: Non-documentation files detected:"
+          find . -type f -not -path "./.git/*" -not -path "./.github/*" \
+            -not -name "*.md" -not -name "*.txt" -not -name "*.yml" -not -name "*.yaml" \
+            -not -name "LICENSE" -not -name ".gitignore"
+        fi
+        
+        echo "Repository security check completed successfully."
