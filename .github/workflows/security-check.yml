@@ -19,28 +19,34 @@ jobs:
       run: |
         echo "Checking repository contents..."
         
-        # List all files (excluding .git directory)
-        FILES=$(find . -type f -not -path "./.git/*" -not -path "./.github/*")
+        # Define allowed file extensions and names
+        ALLOWED_EXTENSIONS=("*.md" "*.txt" "*.yml" "*.yaml")
+        ALLOWED_FILES=("LICENSE" ".gitignore")
         
-        # Check if any executable files exist
-        EXECUTABLES=$(find . -type f -executable -not -path "./.git/*" -not -path "./.github/*" | wc -l)
+        # Check if any files have executable permission bits set
+        EXECUTABLES=$(find . -type f -perm -111 -not -path "./.git/*" -not -path "./.github/*" | wc -l)
         
         if [ "$EXECUTABLES" -gt 0 ]; then
           echo "Error: Executable files found. This repository should only contain documentation."
-          find . -type f -executable -not -path "./.git/*" -not -path "./.github/*"
+          find . -type f -perm -111 -not -path "./.git/*" -not -path "./.github/*"
           exit 1
         fi
         
-        # Verify only allowed file types exist (markdown, txt, and GitHub configs)
-        DISALLOWED=$(find . -type f -not -path "./.git/*" -not -path "./.github/*" \
-          -not -name "*.md" -not -name "*.txt" -not -name "*.yml" -not -name "*.yaml" \
-          -not -name "LICENSE" -not -name ".gitignore" | wc -l)
+        # Build find command with allowed file types
+        FIND_CMD="find . -type f -not -path \"./.git/*\" -not -path \"./.github/*\""
+        for ext in "${ALLOWED_EXTENSIONS[@]}"; do
+          FIND_CMD="$FIND_CMD -not -name \"$ext\""
+        done
+        for file in "${ALLOWED_FILES[@]}"; do
+          FIND_CMD="$FIND_CMD -not -name \"$file\""
+        done
+        
+        # Check for disallowed file types
+        DISALLOWED=$(eval "$FIND_CMD" | wc -l)
         
         if [ "$DISALLOWED" -gt 0 ]; then
           echo "Warning: Non-documentation files detected:"
-          find . -type f -not -path "./.git/*" -not -path "./.github/*" \
-            -not -name "*.md" -not -name "*.txt" -not -name "*.yml" -not -name "*.yaml" \
-            -not -name "LICENSE" -not -name ".gitignore"
+          eval "$FIND_CMD"
         fi
         
         echo "Repository security check completed successfully."
