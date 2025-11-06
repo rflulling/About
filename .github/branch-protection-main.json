@@ -3,7 +3,7 @@
   "name": "main",
   "target": "branch",
   "source_type": "Repository",
-  "source": "rflulling/Battery-Assy_Testing",
+  "source": "rflulling/About",
   "enforcement": "active",
   "conditions": {
     "ref_name": {
