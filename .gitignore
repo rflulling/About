@@ -1,0 +1,27 @@
+# Editor and IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Temporary files
+*.tmp
+*.temp
+/tmp/
+
+# Build artifacts (should not exist in this repo, but just in case)
+dist/
+build/
+*.o
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Logs
+*.log
+
+# OS generated files
+Thumbs.db

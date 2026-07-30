@@ -1,0 +1,54 @@
+# This workflow helps maintain repository security by monitoring for unwanted changes
+name: Repository Security Check
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  security-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Verify repository contains only documentation
+      run: |
+        echo "Checking repository contents..."
+        
+        # Define allowed file extensions and names
+        ALLOWED_EXTENSIONS=("*.md" "*.txt" "*.yml" "*.yaml")
+        ALLOWED_FILES=("LICENSE" ".gitignore")
+        
+        # Check if any files have executable permission bits set
+        EXECUTABLES=$(find . -type f -perm -111 -not -path "./.git/*" -not -path "./.github/*" | wc -l)
+        
+        if [ "$EXECUTABLES" -gt 0 ]; then
+          echo "Error: Executable files found. This repository should only contain documentation."
+          find . -type f -perm -111 -not -path "./.git/*" -not -path "./.github/*"
+          exit 1
+        fi
+        
+        # Build find command with allowed file types
+        FIND_CMD="find . -type f -not -path \"./.git/*\" -not -path \"./.github/*\""
+        for ext in "${ALLOWED_EXTENSIONS[@]}"; do
+          FIND_CMD="$FIND_CMD -not -name \"$ext\""
+        done
+        for file in "${ALLOWED_FILES[@]}"; do
+          FIND_CMD="$FIND_CMD -not -name \"$file\""
+        done
+        
+        # Check for disallowed file types
+        DISALLOWED=$(eval "$FIND_CMD" | wc -l)
+        
+        if [ "$DISALLOWED" -gt 0 ]; then
+          echo "Warning: Non-documentation files detected:"
+          eval "$FIND_CMD"
+        fi
+        
+        echo "Repository security check completed successfully."
