@@ -12,7 +12,7 @@ Today, I am working with the AI as a means to accomplish many years worth of dev
 Hell, no. I am not that naive. It's all a huge waste of time. I am probably going to help a few people, and they will like me for a moment. Thats it. No more love. Certainly not enough to even fund any work. After all, I am doing the work on AI, and most will consider it cheating even if they personally would have refused to help when asked. Mind you I pay like 14.00 a month to do this and there are still limits. Meanwhile I pay Autodesk like 45 a month and it's never earned me one penny meanwhile the account is commercial...
 
 ### You turned on the for hire flag? But you aren't a credentialed developer?
-Look, you can read here by my own selfless omission what I think of myself and my skills. You can see I also use AI side my side to learn and to develop. If by some weird chance you think I am good enough to help with your project. I am willing to listen and see if it is something I think that I can actually help with. I also limited mid range skills in Fusion360, Marlin, and KiCAD. Entry level in desktop CNC. Once upon a time my skills in FDM were something but today its mostly been mowed over as I have put more time into other projects and the world have passed by. I used to use Simplify 3D quite extensively while developing my dual head extruder. But between Simplify becoming vaporware and my recent limited work on my FDM, I cannot claim current expertise. I do will work with my Resin printers, but you may want to test my skill levels as i am not sure the way to best gauge.  
+Look, you can read here by my own selfless admission what I think of myself and my skills. You can see I also use AI side my side to learn and to develop. If by some weird chance you think I am good enough to help with your project. I am willing to listen and see if it is something I think that I can actually help with. I also limited mid range skills in Fusion360, Marlin, and KiCAD. Entry level in desktop CNC. Once upon a time my skills in FDM were something but today its mostly been mowed over as I have put more time into other projects and the world have passed by. I used to use Simplify 3D quite extensively while developing my dual head extruder. But between Simplify becoming vaporware and my recent limited work on my FDM, I cannot claim current expertise. I do will work with my Resin printers, but you may want to test my skill levels as i am not sure the way to best gauge.  
 
 ### I am happily working on (that I am not prohibited to talk about): 
 -Does some of this already exist? Probably. But I am not made of cash. Why buy a program that comes with a subscription that never ends, when I can easily author something very specific to what I am trying to do? In a way this is very much the same premise as to why to have a 3d printer? Why pay hundreds for a custom part I can make at home for a few dollars. -Insert quote about teaching a man to fish. 
@@ -45,8 +45,10 @@ Look, you can read here by my own selfless omission what I think of myself and m
 25) Drivers for Electroplating
 26)  
 
-### Abandoned Projects (includes hardware and software)
+### Abandoned Projects (includes hardware and software):
 A1) RF Repeater: Hardware was 80% and software was only just started
 A2) Laser Break: Hardware was 90% and software was ready for testing. 
+
+
 
 
