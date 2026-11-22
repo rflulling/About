@@ -1,0 +1,80 @@
+# This workflow helps maintain repository security by monitoring for unwanted changes
+name: Repository Security Check
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  security-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Verify repository contains only documentation
+      run: |
+        echo "Checking repository contents..."
+        
+        # Define allowed file extensions and names
+        ALLOWED_EXTENSIONS=("*.md" "*.txt" "*.yml" "*.yaml")
+        ALLOWED_FILES=("LICENSE" ".gitignore")
+        
+        # Check if any files have executable permission bits set
+        EXECUTABLES=$(find . -type f -perm -111 -not -path "./.git/*" -not -path "./.github/*" | wc -l)
+        
+        if [ "$EXECUTABLES" -gt 0 ]; then
+          echo "Error: Executable files found. This repository should only contain documentation."
+          find . -type f -perm -111 -not -path "./.git/*" -not -path "./.github/*"
+          exit 1
+        fi
+        
+        # Find files and filter them against the allowed lists without using eval
+        DISALLOWED_FILES=()
+        
+        # Iterate over all files (excluding .git and .github) and apply whitelist logic
+        while IFS= read -r -d '' FILE; do
+          BASENAME=$(basename "$FILE")
+          
+          ALLOWED=false
+          
+          # Check allowed extensions
+          for ext in "${ALLOWED_EXTENSIONS[@]}"; do
+            case "$BASENAME" in
+              $ext)
+                ALLOWED=true
+                break
+                ;;
+            esac
+          done
+          
+          # Check explicitly allowed filenames if not allowed by extension
+          if [ "$ALLOWED" = false ]; then
+            for allowed_file in "${ALLOWED_FILES[@]}"; do
+              if [ "$BASENAME" = "$allowed_file" ]; then
+                ALLOWED=true
+                break
+              fi
+            done
+          fi
+          
+          # Collect disallowed files
+          if [ "$ALLOWED" = false ]; then
+            DISALLOWED_FILES+=("$FILE")
+          fi
+        done < <(find . -type f -not -path "./.git/*" -not -path "./.github/*" -print0)
+        
+        # Check for disallowed file types
+        DISALLOWED=${#DISALLOWED_FILES[@]}
+        
+        if [ "$DISALLOWED" -gt 0 ]; then
+          echo "Warning: Non-documentation files detected:"
+          printf '%s\n' "${DISALLOWED_FILES[@]}"
+        fi
+        
+        echo "Repository security check completed successfully."
