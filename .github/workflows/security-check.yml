@@ -34,21 +34,47 @@ jobs:
           exit 1
         fi
         
-        # Build find command with allowed file types
-        FIND_CMD="find . -type f -not -path \"./.git/*\" -not -path \"./.github/*\""
-        for ext in "${ALLOWED_EXTENSIONS[@]}"; do
-          FIND_CMD="$FIND_CMD -not -name \"$ext\""
-        done
-        for file in "${ALLOWED_FILES[@]}"; do
-          FIND_CMD="$FIND_CMD -not -name \"$file\""
-        done
+        # Find files and filter them against the allowed lists without using eval
+        DISALLOWED_FILES=()
+        
+        # Iterate over all files (excluding .git and .github) and apply whitelist logic
+        while IFS= read -r -d '' FILE; do
+          BASENAME=$(basename "$FILE")
+          
+          ALLOWED=false
+          
+          # Check allowed extensions
+          for ext in "${ALLOWED_EXTENSIONS[@]}"; do
+            case "$BASENAME" in
+              $ext)
+                ALLOWED=true
+                break
+                ;;
+            esac
+          done
+          
+          # Check explicitly allowed filenames if not allowed by extension
+          if [ "$ALLOWED" = false ]; then
+            for allowed_file in "${ALLOWED_FILES[@]}"; do
+              if [ "$BASENAME" = "$allowed_file" ]; then
+                ALLOWED=true
+                break
+              fi
+            done
+          fi
+          
+          # Collect disallowed files
+          if [ "$ALLOWED" = false ]; then
+            DISALLOWED_FILES+=("$FILE")
+          fi
+        done < <(find . -type f -not -path "./.git/*" -not -path "./.github/*" -print0)
         
         # Check for disallowed file types
-        DISALLOWED=$(eval "$FIND_CMD" | wc -l)
+        DISALLOWED=${#DISALLOWED_FILES[@]}
         
         if [ "$DISALLOWED" -gt 0 ]; then
           echo "Warning: Non-documentation files detected:"
-          eval "$FIND_CMD"
+          printf '%s\n' "${DISALLOWED_FILES[@]}"
         fi
         
         echo "Repository security check completed successfully."
