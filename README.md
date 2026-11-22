@@ -46,8 +46,8 @@ Look, you can read here by my own selfless admission what I think of myself and 
 26)  
 
 ### Abandoned Projects (includes hardware and software):
-A1) RF Repeater: Hardware was 80% and software was only just started
-A2) Laser Break: Hardware was 90% and software was ready for testing. 
+1) RF Repeater: Hardware was 80% and software was only just started.
+2) Laser Break: Hardware was 90% and software was ready for testing. 
 
 
 
