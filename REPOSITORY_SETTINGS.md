@@ -37,8 +37,6 @@ Create a rule for the `main` branch with the following settings:
 Navigate to: **Settings → Code security and analysis**
 
 - [ ] Enable "Private vulnerability reporting" if available
-- [ ] Enable "Dependency graph"
-- [ ] Enable "Dependabot alerts" if applicable
 
 ### 5. Access Control
 
