@@ -9,7 +9,7 @@ This repository serves as a personal profile README hosting space. It contains n
 This repository has been configured with high security settings:
 
 - **Forks**: Disabled to prevent unauthorized copies
-- **Downloads**: Repository downloads should be disabled as there is no distributable content
+- **Downloads**: Repository downloads are disabled as there is no distributable content
 - **Branch Protection**: Configure branch protection rules for the `main` branch to prevent unauthorized modifications
 
 ## Reporting Security Issues
