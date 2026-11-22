@@ -10,7 +10,7 @@ This repository has been configured with high security settings:
 
 - **Forks**: Disabled to prevent unauthorized copies
 - **Downloads**: Repository downloads should be disabled as there is no distributable content
-- **Branch Protection**: Main branch should be protected to prevent unauthorized modifications
+- **Branch Protection**: Configure branch protection rules for the `main` branch to prevent unauthorized modifications
 
 ## Reporting Security Issues
 
